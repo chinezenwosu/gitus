@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "webpack": "webpack --watch",
-    "test": "mocha"
+    "test": "mocha -w test/helpers/browser.js \"test/**/*.test.js\""
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +21,12 @@
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "enzyme": "^3.1.0",
+    "enzyme-adapter-react-15": "^1.0.3",
+    "enzyme-adapter-react-16": "^1.0.2",
+    "jsdom": "^11.3.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
+    "react-test-renderer": "^16.0.0",
     "webpack": "^3.8.1"
   }
 }

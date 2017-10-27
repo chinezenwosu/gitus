@@ -1,7 +1,13 @@
 var React = require("react")
 
-var App = function() {
-  return <div>React config works</div>
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <div><span>React config works</span></div>
+  }
 }
 
 module.exports = App
