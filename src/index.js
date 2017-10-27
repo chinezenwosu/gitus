@@ -1,4 +1,5 @@
 var React = require("react")
 var ReactDom = require("react-dom")
+var App = require("./components/App.jsx")
 
-ReactDom.render(<div>React config works</div>, document.getElementById('app'))
+ReactDom.render(<App />, document.getElementById('app'))
