@@ -15,6 +15,7 @@ class App extends React.Component {
         fork: true,
         language: 'ruby'
       },
+      searchWord: '',
       page: 1,
       per_page: 10,
       repos: [],
@@ -31,7 +32,7 @@ class App extends React.Component {
   }
 
   fetchRepos(page) {
-    var query = toQueryString(this.state.queries)
+    var query = toQueryString(this.state.searchWord, this.state.queries)
     var clientId = process.env.GITHUB_CLIENT_ID
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 

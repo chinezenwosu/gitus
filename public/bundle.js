@@ -21182,6 +21182,7 @@ class App extends React.Component {
         fork: true,
         language: 'ruby'
       },
+      searchWord: '',
       page: 1,
       per_page: 10,
       repos: [],
@@ -21198,7 +21199,7 @@ class App extends React.Component {
   }
 
   fetchRepos(page) {
-    var query = toQueryString(this.state.queries);
+    var query = toQueryString(this.state.searchWord, this.state.queries);
     var clientId = "8276ce473b0a8be6e7b2";
     var clientSecret = "f69ee6fa66eaa5bf61703d38e0443e86a00eaf3d";
 
@@ -21400,13 +21401,14 @@ module.exports = Paginator;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-const toQueryString = paramsObj => {
+const toQueryString = (searchWord, paramsObj) => {
   let query = '';
   const esc = encodeURIComponent;
   const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key]);
   if (validQuery.length) {
     query = validQuery.map(param => `${esc(param)}:${esc(paramsObj[param])}`).join('&');
-    return `?q=${query}`;
+    if (searchWord && query.length) searchWord = `${searchWord}&`;
+    return `?q=${searchWord}${query}`;
   }
   return query;
 };
