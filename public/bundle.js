@@ -21166,17 +21166,49 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 var React = __webpack_require__(3);
-var ReposData = __webpack_require__(35);
+var ReposData = __webpack_require__(33);
+var Paginator = __webpack_require__(34);
+var toQueryString = __webpack_require__(35).toQueryString;
+var apiUrl = 'https://api.github.com/search/repositories';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { repos: [] };
+    this.state = {
+      queries: {
+        stars: '<10',
+        topic: 'ruby',
+        fork: true
+      },
+      page: 1,
+      per_page: 10,
+      repos: []
+    };
+
+    this.setPageQuery = this.setPageQuery.bind(this);
+    this.fetchRepos = this.fetchRepos.bind(this);
   }
 
   componentWillMount() {
-    fetch('https://api.github.com/search/repositories?q=stars').then(res => res.json()).then(repos => this.setState({ repos: repos.items }));
+    this.fetchRepos();
+  }
+
+  fetchRepos() {
+    var query = toQueryString(this.state.queries);
+    var clientId = "8276ce473b0a8be6e7b2";
+    var clientSecret = "f69ee6fa66eaa5bf61703d38e0443e86a00eaf3d";
+
+    console.log(`${apiUrl}${query}&page=${this.state.page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
+    fetch(`${apiUrl}${query}&page=${this.state.page}&per_page=3`).then(res => res.json()).then(repos => {
+      console.log(repos);this.setState({ repos: repos.items });
+    });
+  }
+
+  setPageQuery(page) {
+    this.setState({ page }, () => {
+      this.fetchRepos();
+    });
   }
 
   render() {
@@ -21212,7 +21244,8 @@ class App extends React.Component {
           )
         ),
         React.createElement(ReposData, { repos: repos })
-      )
+      ),
+      React.createElement(Paginator, { page: this.state.page, setPageQuery: this.setPageQuery })
     );
   }
 }
@@ -21220,9 +21253,7 @@ class App extends React.Component {
 module.exports = App;
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var React = __webpack_require__(3);
@@ -21233,10 +21264,10 @@ class App extends React.Component {
   }
 
   getReposBody(repos) {
-    var repoList = repos.map(repo => {
+    var repoList = repos.map((repo, index) => {
       return React.createElement(
         "tr",
-        { key: repo.owner.login },
+        { key: index },
         React.createElement(
           "td",
           null,
@@ -21274,6 +21305,95 @@ class App extends React.Component {
 }
 
 module.exports = App;
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(3);
+
+class Paginator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      page: 1
+    };
+
+    this.goToPage = this.goToPage.bind(this);
+  }
+
+  goToPage(count) {
+    var newCount = this.props.page + count;
+    this.props.setPageQuery(newCount);
+  }
+
+  render() {
+    var repos = this.state.repos;
+
+    return React.createElement(
+      "div",
+      null,
+      React.createElement(
+        "table",
+        null,
+        React.createElement(
+          "thead",
+          null,
+          React.createElement(
+            "tr",
+            null,
+            React.createElement(
+              "td",
+              null,
+              "Page ",
+              this.props.page
+            ),
+            React.createElement(
+              "td",
+              { onClick: () => this.goToPage(-1) },
+              React.createElement(
+                "button",
+                { disabled: this.props.page < 2 },
+                "Previous"
+              )
+            ),
+            React.createElement(
+              "td",
+              { onClick: () => this.goToPage(1) },
+              React.createElement(
+                "button",
+                null,
+                "Next"
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+}
+
+module.exports = Paginator;
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const toQueryString = paramsObj => {
+  let query = '';
+  const esc = encodeURIComponent;
+  const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key]);
+  if (validQuery.length) {
+    query = validQuery.map(param => `${esc(param)}:${esc(paramsObj[param])}`).join('&');
+    return `?q=${query}`;
+  }
+  return query;
+};
+/* harmony export (immutable) */ __webpack_exports__["toQueryString"] = toQueryString;
+
 
 /***/ })
 /******/ ]);
