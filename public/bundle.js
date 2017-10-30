@@ -21183,7 +21183,9 @@ class App extends React.Component {
       },
       page: 1,
       per_page: 10,
-      repos: []
+      repos: [],
+      message: '',
+      disableNext: false
     };
 
     this.setPageQuery = this.setPageQuery.bind(this);
@@ -21191,32 +21193,42 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchRepos();
+    this.fetchRepos(this.state.page);
   }
 
-  fetchRepos() {
+  fetchRepos(page) {
     var query = toQueryString(this.state.queries);
     var clientId = "8276ce473b0a8be6e7b2";
     var clientSecret = "f69ee6fa66eaa5bf61703d38e0443e86a00eaf3d";
 
-    console.log(`${apiUrl}${query}&page=${this.state.page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
-    fetch(`${apiUrl}${query}&page=${this.state.page}&per_page=3`).then(res => res.json()).then(repos => {
-      console.log(repos);this.setState({ repos: repos.items });
+    console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
+    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
+      if (repos.items) {
+        this.setState({ disableNext: false, page, repos: repos.items, message: '' });
+      } else {
+        this.setState({ disableNext: true, message: 'There are no more results' });
+      }
     });
   }
 
   setPageQuery(page) {
-    this.setState({ page }, () => {
-      this.fetchRepos();
-    });
+    this.fetchRepos(page);
   }
 
   render() {
-    var repos = this.state.repos;
+    var repos = this.state.repos || [];
+    var message = this.state.message;
+    var page = this.state.page;
+    var disableNext = this.state.disableNext;
 
     return React.createElement(
       "div",
       null,
+      message && React.createElement(
+        "p",
+        null,
+        message
+      ),
       React.createElement(
         "table",
         null,
@@ -21245,7 +21257,7 @@ class App extends React.Component {
         ),
         React.createElement(ReposData, { repos: repos })
       ),
-      React.createElement(Paginator, { page: this.state.page, setPageQuery: this.setPageQuery })
+      React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
     );
   }
 }
@@ -21363,7 +21375,7 @@ class Paginator extends React.Component {
               { onClick: () => this.goToPage(1) },
               React.createElement(
                 "button",
-                null,
+                { disabled: this.props.disableNext },
                 "Next"
               )
             )

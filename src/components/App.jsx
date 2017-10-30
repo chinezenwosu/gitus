@@ -16,7 +16,9 @@ class App extends React.Component {
       },
       page: 1,
       per_page: 10,
-      repos: []
+      repos: [],
+      message: '',
+      disableNext: false
     }
 
     this.setPageQuery = this.setPageQuery.bind(this)
@@ -24,31 +26,39 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchRepos()
+    this.fetchRepos(this.state.page)
   }
 
-  fetchRepos() {
+  fetchRepos(page) {
     var query = toQueryString(this.state.queries)
     var clientId = process.env.GITHUB_CLIENT_ID
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 
-    console.log(`${apiUrl}${query}&page=${this.state.page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`)
-    fetch(`${apiUrl}${query}&page=${this.state.page}&per_page=3`)
+    console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`)
+    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`)
       .then(res => res.json())
-      .then(repos => {console.log(repos); this.setState({ repos: repos.items })})
+      .then(repos => {
+        if (repos.items) {
+          this.setState({ disableNext: false, page, repos: repos.items, message: '' })
+        } else {
+          this.setState({ disableNext: true, message: 'There are no more results' })
+        }
+      })
   }
 
   setPageQuery(page) {
-    this.setState({ page }, () => {
-      this.fetchRepos()
-    })
+    this.fetchRepos(page)
   }
 
   render() {
-    var repos = this.state.repos
+    var repos = this.state.repos || []
+    var message = this.state.message
+    var page = this.state.page
+    var disableNext = this.state.disableNext
 
     return (
       <div>
+        { message && <p>{ message }</p> }
         <table>
           <thead>
             <tr>
@@ -59,7 +69,7 @@ class App extends React.Component {
           </thead>
           <ReposData repos={repos} />
         </table>
-        <Paginator page={this.state.page} setPageQuery={this.setPageQuery} />
+        <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} />
       </div>
     )
   }
