@@ -6,9 +6,9 @@ class App extends React.Component {
   }
 
   getReposBody(repos) {
-    var repoList = repos.map(repo => {
+    var repoList = repos.map((repo, index) => {
       return (
-        <tr key={repo.owner.login}>
+        <tr key={index}>
           <td>{repo.owner.login}</td>
           <td><a href={repo.html_url} target='_blank'>{repo.html_url}</a></td>
           <td>{repo.stargazers_count}</td>
