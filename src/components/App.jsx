@@ -13,6 +13,7 @@ class App extends React.Component {
         stars: '<10',
         topic: 'ruby',
         fork: true,
+        language: 'ruby'
       },
       page: 1,
       per_page: 10,
@@ -39,6 +40,7 @@ class App extends React.Component {
       .then(res => res.json())
       .then(repos => {
         if (repos.items) {
+          console.log('users', repos.items)
           this.setState({ disableNext: false, page, repos: repos.items, message: '' })
         } else {
           this.setState({ disableNext: true, message: 'There are no more results' })

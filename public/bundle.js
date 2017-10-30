@@ -21179,7 +21179,8 @@ class App extends React.Component {
       queries: {
         stars: '<10',
         topic: 'ruby',
-        fork: true
+        fork: true,
+        language: 'ruby'
       },
       page: 1,
       per_page: 10,
@@ -21204,6 +21205,7 @@ class App extends React.Component {
     console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
+        console.log('users', repos.items);
         this.setState({ disableNext: false, page, repos: repos.items, message: '' });
       } else {
         this.setState({ disableNext: true, message: 'There are no more results' });
@@ -21278,24 +21280,28 @@ class App extends React.Component {
   getReposBody(repos) {
     var repoList = repos.map((repo, index) => {
       return React.createElement(
-        "tr",
+        'tr',
         { key: index },
         React.createElement(
-          "td",
-          null,
-          repo.owner.login
-        ),
-        React.createElement(
-          "td",
+          'td',
           null,
           React.createElement(
-            "a",
-            { href: repo.html_url, target: "_blank" },
+            'a',
+            { href: repo.owner.html_url, target: '_blank' },
+            repo.owner.login
+          )
+        ),
+        React.createElement(
+          'td',
+          null,
+          React.createElement(
+            'a',
+            { href: repo.html_url, target: '_blank' },
             repo.html_url
           )
         ),
         React.createElement(
-          "td",
+          'td',
           null,
           repo.stargazers_count
         )
@@ -21309,7 +21315,7 @@ class App extends React.Component {
     var repos = this.props.repos;
 
     return React.createElement(
-      "tbody",
+      'tbody',
       null,
       this.getReposBody(repos)
     );
