@@ -21166,21 +21166,21 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 var React = __webpack_require__(3);
-var UsersData = __webpack_require__(33);
+var ReposData = __webpack_require__(35);
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { users: [] };
+    this.state = { repos: [] };
   }
 
   componentWillMount() {
-    fetch('https://api.github.com/users').then(res => res.json()).then(users => this.setState({ users }));
+    fetch('https://api.github.com/search/repositories?q=stars').then(res => res.json()).then(repos => this.setState({ repos: repos.items }));
   }
 
   render() {
-    var users = this.state.users;
+    var repos = this.state.repos;
 
     return React.createElement(
       "div",
@@ -21197,7 +21197,12 @@ class App extends React.Component {
             React.createElement(
               "td",
               null,
-              "Name"
+              "Github User"
+            ),
+            React.createElement(
+              "td",
+              null,
+              "Github Repo"
             ),
             React.createElement(
               "td",
@@ -21206,7 +21211,7 @@ class App extends React.Component {
             )
           )
         ),
-        React.createElement(UsersData, { users: users })
+        React.createElement(ReposData, { repos: repos })
       )
     );
   }
@@ -21215,7 +21220,9 @@ class App extends React.Component {
 module.exports = App;
 
 /***/ }),
-/* 33 */
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var React = __webpack_require__(3);
@@ -21225,34 +21232,43 @@ class App extends React.Component {
     super(props);
   }
 
-  getUsersBody(users) {
-    var userList = users.map(user => {
+  getReposBody(repos) {
+    var repoList = repos.map(repo => {
       return React.createElement(
         "tr",
-        { key: user.login },
+        { key: repo.owner.login },
         React.createElement(
           "td",
           null,
-          user.login
+          repo.owner.login
         ),
         React.createElement(
           "td",
           null,
-          "Dummy"
+          React.createElement(
+            "a",
+            { href: repo.html_url, target: "_blank" },
+            repo.html_url
+          )
+        ),
+        React.createElement(
+          "td",
+          null,
+          repo.stargazers_count
         )
       );
     });
 
-    return userList;
+    return repoList;
   }
 
   render() {
-    var users = this.props.users;
+    var repos = this.props.repos;
 
     return React.createElement(
       "tbody",
       null,
-      this.getUsersBody(users)
+      this.getReposBody(repos)
     );
   }
 }

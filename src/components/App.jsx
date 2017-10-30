@@ -1,33 +1,33 @@
 var React = require("react")
-var UsersData = require("./UsersData")
+var ReposData = require("./ReposData")
 
 class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { users: [] }
+    this.state = { repos: [] }
   }
 
   componentWillMount() {
-    fetch('https://api.github.com/users')
+    fetch('https://api.github.com/search/repositories?q=stars')
       .then(res => res.json())
-      .then(users => this.setState({ users }))
+      .then(repos => this.setState({ repos: repos.items }))
   }
 
   render() {
-    var users = this.state.users
+    var repos = this.state.repos
 
-    
     return (
       <div>
         <table>
           <thead>
             <tr>
-              <td>Name</td>
+              <td>Github User</td>
+              <td>Github Repo</td>
               <td>Number of stars</td>
             </tr>
           </thead>
-          <UsersData users={users} />
+          <ReposData repos={repos} />
         </table>
       </div>
     )
