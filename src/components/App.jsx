@@ -11,12 +11,11 @@ class App extends React.Component {
 
     this.state = {
       queries: {
+        search: 'chi',
         stars: '<10',
         topic: 'ruby',
-        fork: true,
         language: 'ruby'
       },
-      searchWord: '',
       page: 1,
       per_page: 10,
       repos: [],
@@ -26,6 +25,7 @@ class App extends React.Component {
 
     this.setPageQuery = this.setPageQuery.bind(this)
     this.fetchRepos = this.fetchRepos.bind(this)
+    this.searchRepos = this.searchRepos.bind(this)
   }
 
   componentWillMount() {
@@ -33,7 +33,7 @@ class App extends React.Component {
   }
 
   fetchRepos(page) {
-    var query = toQueryString(this.state.searchWord, this.state.queries)
+    var query = toQueryString(this.state.queries)
     var clientId = process.env.GITHUB_CLIENT_ID
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 
@@ -54,6 +54,13 @@ class App extends React.Component {
     this.fetchRepos(page)
   }
 
+  searchRepos(queries) {
+    console.log('queries', this.state.queries)
+    this.setState({ queries }, function() {
+      this.fetchRepos(1)
+    })
+  }
+
   render() {
     var repos = this.state.repos || []
     var message = this.state.message
@@ -63,7 +70,7 @@ class App extends React.Component {
     return (
       <div>
         { message && <p>{ message }</p> }
-        <Filter />
+        <Filter searchRepos={this.searchRepos} />
         <table>
           <thead>
             <tr>

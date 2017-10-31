@@ -8,18 +8,55 @@ class Paginator extends React.Component {
       search: false,
       language: false,
       stars: false,
-      forked: false
+      topic: false,
+      starsDropdown: {
+        show: false,
+        key: 'Equal to',
+        value: '='
+      },
+      queries: {
+        search: '',
+        stars: '',
+        topic: '',
+        language: ''
+      },
+      starsInput: ''
     }
 
     this.getFilters = this.getFilters.bind(this)
+    this.setQuery = this.setQuery.bind(this)
+    this.showDropdown = this.showDropdown.bind(this)
+    this.hideDropdown = this.hideDropdown.bind(this)
+    this.searchRepos = this.searchRepos.bind(this)
   }
 
   getFilters() {
     return [
-      {text: 'Search word', state: 'search'},
-      {text: 'Language', state: 'language'},
-      {text: 'No. of Stars', state: 'stars'},
-      {text: '+ Forked Repos', state: 'forked'}
+      {text: 'Search word', state: 'search', input: {type: 'text'}},
+      {text: 'Language', state: 'language', input: {type: 'text'}},
+      {text: 'Topic', state: 'topic', input: {type: 'text'}},
+      {
+        text: 'No. of Stars',
+        state: 'stars',
+        dropdown: true,
+        options: [
+          {
+            key: 'Equal to',
+            value: '='
+          },
+          {
+            key: 'Less than',
+            value: '<'
+          },
+          {
+            key: 'Greater than',
+            value: '>'
+          }
+        ],
+        input: {
+          type: 'number'
+        }
+      }
     ]
   }
 
@@ -29,11 +66,83 @@ class Paginator extends React.Component {
     })
   }
 
+  showDropdown(state) {
+    if (!this.state[state].show) {
+      this.setState(prevState => {
+        return { [state]: Object.assign(prevState[state], { show: true }) }
+      })
+    }
+  }
+
+  hideDropdown(state) {
+    if (this.state[state].show) {
+      this.setState(prevState => {
+        return { [state]: Object.assign(prevState[state], { show: false }) }
+      })
+    }
+  }
+
+  setQuery(state, value) {
+    value.show = this.state[state].show
+    this.setState({ [state]: value })
+    this.hideDropdown(state)
+  }
+
+  searchRepos() {
+    this.props.searchRepos(this.state.queries)
+  }
+
+  onChange(event, inputState) {
+    this.setState({ queries: Object.assign(this.state.queries, {[inputState]: event.target.value}) })
+  }
+
   render() {
     var filterDom = this.getFilters().map(filter => {
+      var extraInfo
+      var dropdownState = `${filter.state}Dropdown`
+      var inputState = `${filter.state}`
+
+      if (filter.dropdown) {
+        extraInfo = (
+          <div className='dropdown'>
+            <span>{this.state[dropdownState].key}</span>
+            <div className='dropdown-input'>
+              { 
+                filter.input &&
+                <input
+                  value={this.state.queries[inputState]}
+                  onChange={(event) => this.onChange(event, inputState)}
+                  type={filter.input.type}
+                  onFocus={() => this.showDropdown(dropdownState)}
+                />
+              }
+              {
+                this.state[dropdownState].show &&
+                <div className='dropdown-options'>
+                  {
+                    filter.options.map(option => {
+                      return <div key={option.key} id={option.value} onClick={() => this.setQuery(dropdownState, option)}>{option.key}</div>
+                    })
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        )
+      } else {
+        extraInfo = (
+          <div>
+            { filter.input && <input value={this.state.queries[inputState]} onChange={(event) => this.onChange(event, inputState)} type={filter.input.type} /> }
+          </div>
+        )
+      }
+
       return (
-        <div onClick={() => this.toggleFilter(filter.state)} className={this.state[filter.state] ? 'enabled' : ''}>
-          {filter.text}
+        <div key={filter.state} className='filter-container'>
+          <div onClick={() => this.toggleFilter(filter.state)} className={this.state[filter.state] ? 'filter enabled' : 'filter'}>
+            {filter.text}
+          </div>
+          {this.state[filter.state] && extraInfo}
         </div>
       )
     })
@@ -41,6 +150,7 @@ class Paginator extends React.Component {
     return (
       <header>
         {filterDom}
+        <button className='search-button' onClick={this.searchRepos}>Search</button>
       </header>
     )
   }
