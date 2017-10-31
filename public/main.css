@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+}
+
+header {
+  background: #00008b;
+  color: white;
+  text-align: center;
+  padding: 60px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+header > div {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  width: 200px;
+  font-size: 12px;
+  letter-spacing: 0.7px;
+  margin: 0 -1.5px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  cursor: pointer;
+  position: relative;
+}
+
+header > div:before {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  left: 10px;
+  top: 4px;
+}
+
+header > div.enabled:before {
+  border: 3px solid #d2601e;
+}
+
+@media only screen and (max-width: 768px) {
+  header {
+    height: 100vh;
+    flex-direction: column;
+    display: none;
+  }
+
+  header.open-header {
+     display: block; 
+  }
+}

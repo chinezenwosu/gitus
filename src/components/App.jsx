@@ -1,6 +1,7 @@
 var React = require("react")
 var ReposData = require("./ReposData")
 var Paginator = require("./Paginator")
+var Filter = require("./Filter")
 var toQueryString = require("../helpers/string").toQueryString
 var apiUrl = 'https://api.github.com/search/repositories'
 
@@ -62,6 +63,7 @@ class App extends React.Component {
     return (
       <div>
         { message && <p>{ message }</p> }
+        <Filter />
         <table>
           <thead>
             <tr>

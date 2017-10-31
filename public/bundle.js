@@ -300,6 +300,21 @@ module.exports = emptyFunction;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(16);
+} else {
+  module.exports = __webpack_require__(17);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -353,21 +368,6 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 module.exports = invariant;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(16);
-} else {
-  module.exports = __webpack_require__(17);
-}
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -575,7 +575,7 @@ module.exports = warning;
 
 
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(2);
+  var invariant = __webpack_require__(3);
   var warning = __webpack_require__(6);
   var ReactPropTypesSecret = __webpack_require__(8);
   var loggedTypeFailures = {};
@@ -956,7 +956,7 @@ module.exports = getActiveElement;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 var ReactDom = __webpack_require__(18);
 var App = __webpack_require__(32);
 
@@ -976,7 +976,7 @@ ReactDom.render(React.createElement(App, null), document.getElementById('app'));
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(4),p=__webpack_require__(5);__webpack_require__(2);var r=__webpack_require__(1);
+var f=__webpack_require__(4),p=__webpack_require__(5);__webpack_require__(3);var r=__webpack_require__(1);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -1016,7 +1016,7 @@ if (process.env.NODE_ENV !== "production") {
 var objectAssign$1 = __webpack_require__(4);
 var require$$0 = __webpack_require__(6);
 var emptyObject = __webpack_require__(5);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var emptyFunction = __webpack_require__(1);
 var checkPropTypes = __webpack_require__(7);
 
@@ -2759,7 +2759,7 @@ if (process.env.NODE_ENV === 'production') {
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(3);__webpack_require__(2);var l=__webpack_require__(9),n=__webpack_require__(4),ba=__webpack_require__(10),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(11),fa=__webpack_require__(12),ha=__webpack_require__(13),ia=__webpack_require__(14);
+var aa=__webpack_require__(2);__webpack_require__(3);var l=__webpack_require__(9),n=__webpack_require__(4),ba=__webpack_require__(10),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(11),fa=__webpack_require__(12),ha=__webpack_require__(13),ia=__webpack_require__(14);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -3084,8 +3084,8 @@ if (process.env.NODE_ENV !== "production") {
 
 'use strict';
 
-var react = __webpack_require__(3);
-var invariant = __webpack_require__(2);
+var react = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var ExecutionEnvironment = __webpack_require__(9);
 var _assign = __webpack_require__(4);
 var EventListener = __webpack_require__(10);
@@ -20561,7 +20561,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 var emptyFunction = __webpack_require__(1);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var warning = __webpack_require__(6);
 var assign = __webpack_require__(4);
 
@@ -21111,7 +21111,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 var emptyFunction = __webpack_require__(1);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var ReactPropTypesSecret = __webpack_require__(8);
 
 module.exports = function() {
@@ -21165,10 +21165,11 @@ module.exports = function() {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 var ReposData = __webpack_require__(33);
 var Paginator = __webpack_require__(34);
-var toQueryString = __webpack_require__(35).toQueryString;
+var Filter = __webpack_require__(35);
+var toQueryString = __webpack_require__(36).toQueryString;
 var apiUrl = 'https://api.github.com/search/repositories';
 
 class App extends React.Component {
@@ -21200,8 +21201,8 @@ class App extends React.Component {
 
   fetchRepos(page) {
     var query = toQueryString(this.state.searchWord, this.state.queries);
-    var clientId = "8276ce473b0a8be6e7b2";
-    var clientSecret = "f69ee6fa66eaa5bf61703d38e0443e86a00eaf3d";
+    var clientId = undefined;
+    var clientSecret = undefined;
 
     console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
@@ -21232,6 +21233,7 @@ class App extends React.Component {
         null,
         message
       ),
+      React.createElement(Filter, null),
       React.createElement(
         "table",
         null,
@@ -21271,7 +21273,7 @@ module.exports = App;
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 
 class App extends React.Component {
   constructor(props) {
@@ -21329,7 +21331,7 @@ module.exports = App;
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 
 class Paginator extends React.Component {
   constructor(props) {
@@ -21397,6 +21399,55 @@ module.exports = Paginator;
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(2);
+
+class Paginator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      search: false,
+      language: false,
+      stars: false,
+      forked: false
+    };
+
+    this.getFilters = this.getFilters.bind(this);
+  }
+
+  getFilters() {
+    return [{ text: 'Search word', state: 'search' }, { text: 'Language', state: 'language' }, { text: 'No. of Stars', state: 'stars' }, { text: '+ Forked Repos', state: 'forked' }];
+  }
+
+  toggleFilter(state) {
+    this.setState(prevState => {
+      return { [state]: !prevState[state] };
+    });
+  }
+
+  render() {
+    var filterDom = this.getFilters().map(filter => {
+      return React.createElement(
+        'div',
+        { onClick: () => this.toggleFilter(filter.state), className: this.state[filter.state] ? 'enabled' : '' },
+        filter.text
+      );
+    });
+
+    return React.createElement(
+      'header',
+      null,
+      filterDom
+    );
+  }
+}
+
+module.exports = Paginator;
+
+/***/ }),
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
