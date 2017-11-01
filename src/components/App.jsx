@@ -11,16 +11,17 @@ class App extends React.Component {
 
     this.state = {
       queries: {
-        search: 'chi',
-        stars: '<10',
-        topic: 'ruby',
-        language: 'ruby'
+        search: '',
+        stars: '',
+        topic: '',
+        language: ''
       },
       page: 1,
       per_page: 10,
       repos: [],
       message: '',
-      disableNext: false
+      disableNext: false,
+      loading: false
     }
 
     this.setPageQuery = this.setPageQuery.bind(this)
@@ -28,24 +29,20 @@ class App extends React.Component {
     this.searchRepos = this.searchRepos.bind(this)
   }
 
-  componentWillMount() {
-    this.fetchRepos(this.state.page)
-  }
-
   fetchRepos(page) {
     var query = toQueryString(this.state.queries)
     var clientId = process.env.GITHUB_CLIENT_ID
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 
+    this.setState({ loading: true })
     console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`)
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`)
       .then(res => res.json())
       .then(repos => {
         if (repos.items) {
-          console.log('users', repos.items)
-          this.setState({ disableNext: false, page, repos: repos.items, message: '' })
+          this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' })
         } else {
-          this.setState({ disableNext: true, message: 'There are no more results' })
+          this.setState({ loading: false, disableNext: true, message: 'There are no more results' })
         }
       })
   }
@@ -65,23 +62,35 @@ class App extends React.Component {
     var repos = this.state.repos || []
     var message = this.state.message
     var page = this.state.page
+    var loading = this.state.loading
     var disableNext = this.state.disableNext
+
+    var results = <div className='loader' />
+    if (!loading) {
+      results = (
+        <div className='results'>
+          <table className='results-table'>
+            <thead>
+              <tr>
+                <td>Github User</td>
+                <td>Github Repo</td>
+                <td>Number of stars</td>
+              </tr>
+            </thead>
+            <ReposData repos={repos} />
+          </table>
+          <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} />
+        </div>
+      )
+    }
 
     return (
       <div>
         { message && <p>{ message }</p> }
-        <Filter searchRepos={this.searchRepos} />
-        <table>
-          <thead>
-            <tr>
-              <td>Github User</td>
-              <td>Github Repo</td>
-              <td>Number of stars</td>
-            </tr>
-          </thead>
-          <ReposData repos={repos} />
-        </table>
-        <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} />
+        <Filter searchRepos={this.searchRepos} disableSearchButton={loading} />
+        { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
+        { repos.length === 0 && loading && <div className='loader' /> }
+        { repos.length > 0 && results }
       </div>
     )
   }

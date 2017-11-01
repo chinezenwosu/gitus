@@ -20,16 +20,12 @@ class Paginator extends React.Component {
     var repos = this.state.repos
 
     return (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <td>Page {this.props.page}</td>
-              <td onClick={() => this.goToPage(-1)}><button disabled={this.props.page < 2}>Previous</button></td>
-              <td onClick={() => this.goToPage(1)}><button disabled={this.props.disableNext}>Next</button></td>
-            </tr>
-          </thead>
-        </table>
+      <div className='paginator'>
+        <div className='page'>Page {this.props.page}</div>
+        <div>
+          <button className='previous' onClick={() => this.goToPage(-1)} disabled={this.props.page < 2}>Previous</button>
+          <button className='next' onClick={() => this.goToPage(1)} disabled={this.props.disableNext}>Next</button>
+        </div>
       </div>
     )
   }

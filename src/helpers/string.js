@@ -4,8 +4,13 @@ export const toQueryString = (paramsObj) => {
   const esc = encodeURIComponent
   const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key] && key !== 'search')
   if (validQuery.length) {
-    query = validQuery.map(param => `${esc(param)}:${esc(paramsObj[param])}`).join('&')
-    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}&`
+    query = validQuery.map(param => {
+      if (param !== 'stars') {
+        return `${esc(param)}:${esc(paramsObj[param])}`
+      }
+      return `${param}:${paramsObj[param]}`
+    }).join('&')
+    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}+`
     return `?q=${searchWord}${query}`
   }
   return query

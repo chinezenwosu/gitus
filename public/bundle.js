@@ -21178,16 +21178,17 @@ class App extends React.Component {
 
     this.state = {
       queries: {
-        search: 'chi',
-        stars: '<10',
-        topic: 'ruby',
-        language: 'ruby'
+        search: '',
+        stars: '',
+        topic: '',
+        language: ''
       },
       page: 1,
       per_page: 10,
       repos: [],
       message: '',
-      disableNext: false
+      disableNext: false,
+      loading: false
     };
 
     this.setPageQuery = this.setPageQuery.bind(this);
@@ -21195,22 +21196,18 @@ class App extends React.Component {
     this.searchRepos = this.searchRepos.bind(this);
   }
 
-  componentWillMount() {
-    this.fetchRepos(this.state.page);
-  }
-
   fetchRepos(page) {
     var query = toQueryString(this.state.queries);
     var clientId = undefined;
     var clientSecret = undefined;
 
+    this.setState({ loading: true });
     console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
-        console.log('users', repos.items);
-        this.setState({ disableNext: false, page, repos: repos.items, message: '' });
+        this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
       } else {
-        this.setState({ disableNext: true, message: 'There are no more results' });
+        this.setState({ loading: false, disableNext: true, message: 'There are no more results' });
       }
     });
   }
@@ -21230,7 +21227,45 @@ class App extends React.Component {
     var repos = this.state.repos || [];
     var message = this.state.message;
     var page = this.state.page;
+    var loading = this.state.loading;
     var disableNext = this.state.disableNext;
+
+    var results = React.createElement("div", { className: "loader" });
+    if (!loading) {
+      results = React.createElement(
+        "div",
+        { className: "results" },
+        React.createElement(
+          "table",
+          { className: "results-table" },
+          React.createElement(
+            "thead",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              React.createElement(
+                "td",
+                null,
+                "Github User"
+              ),
+              React.createElement(
+                "td",
+                null,
+                "Github Repo"
+              ),
+              React.createElement(
+                "td",
+                null,
+                "Number of stars"
+              )
+            )
+          ),
+          React.createElement(ReposData, { repos: repos })
+        ),
+        React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
+      );
+    }
 
     return React.createElement(
       "div",
@@ -21240,36 +21275,14 @@ class App extends React.Component {
         null,
         message
       ),
-      React.createElement(Filter, { searchRepos: this.searchRepos }),
-      React.createElement(
-        "table",
-        null,
-        React.createElement(
-          "thead",
-          null,
-          React.createElement(
-            "tr",
-            null,
-            React.createElement(
-              "td",
-              null,
-              "Github User"
-            ),
-            React.createElement(
-              "td",
-              null,
-              "Github Repo"
-            ),
-            React.createElement(
-              "td",
-              null,
-              "Number of stars"
-            )
-          )
-        ),
-        React.createElement(ReposData, { repos: repos })
+      React.createElement(Filter, { searchRepos: this.searchRepos, disableSearchButton: loading }),
+      repos.length === 0 && !loading && React.createElement(
+        "div",
+        { className: "no-results" },
+        "Please click on one or more of the search filters above to search for repositories."
       ),
-      React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
+      repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
+      repos.length > 0 && results
     );
   }
 }
@@ -21360,42 +21373,26 @@ class Paginator extends React.Component {
     var repos = this.state.repos;
 
     return React.createElement(
-      "div",
-      null,
+      'div',
+      { className: 'paginator' },
       React.createElement(
-        "table",
+        'div',
+        { className: 'page' },
+        'Page ',
+        this.props.page
+      ),
+      React.createElement(
+        'div',
         null,
         React.createElement(
-          "thead",
-          null,
-          React.createElement(
-            "tr",
-            null,
-            React.createElement(
-              "td",
-              null,
-              "Page ",
-              this.props.page
-            ),
-            React.createElement(
-              "td",
-              { onClick: () => this.goToPage(-1) },
-              React.createElement(
-                "button",
-                { disabled: this.props.page < 2 },
-                "Previous"
-              )
-            ),
-            React.createElement(
-              "td",
-              { onClick: () => this.goToPage(1) },
-              React.createElement(
-                "button",
-                { disabled: this.props.disableNext },
-                "Next"
-              )
-            )
-          )
+          'button',
+          { className: 'previous', onClick: () => this.goToPage(-1), disabled: this.props.page < 2 },
+          'Previous'
+        ),
+        React.createElement(
+          'button',
+          { className: 'next', onClick: () => this.goToPage(1), disabled: this.props.disableNext },
+          'Next'
         )
       )
     );
@@ -21464,11 +21461,16 @@ class Paginator extends React.Component {
   toggleFilter(state) {
     this.setState(prevState => {
       return { [state]: !prevState[state] };
+    }, () => {
+      if (this.state[state]) {
+        this[state].focus();
+        this.showDropdown(`${state}Dropdown`);
+      }
     });
   }
 
   showDropdown(state) {
-    if (!this.state[state].show) {
+    if (this.state[state] && !this.state[state].show) {
       this.setState(prevState => {
         return { [state]: Object.assign(prevState[state], { show: true }) };
       });
@@ -21476,7 +21478,7 @@ class Paginator extends React.Component {
   }
 
   hideDropdown(state) {
-    if (this.state[state].show) {
+    if (this.state[state] && this.state[state].show) {
       this.setState(prevState => {
         return { [state]: Object.assign(prevState[state], { show: false }) };
       });
@@ -21486,11 +21488,14 @@ class Paginator extends React.Component {
   setQuery(state, value) {
     value.show = this.state[state].show;
     this.setState({ [state]: value });
-    this.hideDropdown(state);
   }
 
   searchRepos() {
-    this.props.searchRepos(this.state.queries);
+    var queries = this.state.queries;
+    if (this.state.starsDropdown.value !== '=') {
+      queries.stars = `${this.state.starsDropdown.value}${queries.stars}`;
+    }
+    this.props.searchRepos(queries);
   }
 
   onChange(event, inputState) {
@@ -21512,39 +21517,42 @@ class Paginator extends React.Component {
             null,
             this.state[dropdownState].key
           ),
-          React.createElement(
+          filter.input && React.createElement('input', {
+            value: this.state.queries[inputState],
+            onChange: event => this.onChange(event, inputState),
+            type: filter.input.type,
+            onFocus: () => this.showDropdown(dropdownState),
+            ref: input => this[filter.state] = input
+          }),
+          this.state[dropdownState].show && React.createElement(
             'div',
-            { className: 'dropdown-input' },
-            filter.input && React.createElement('input', {
-              value: this.state.queries[inputState],
-              onChange: event => this.onChange(event, inputState),
-              type: filter.input.type,
-              onFocus: () => this.showDropdown(dropdownState)
-            }),
-            this.state[dropdownState].show && React.createElement(
-              'div',
-              { className: 'dropdown-options' },
-              filter.options.map(option => {
-                return React.createElement(
-                  'div',
-                  { key: option.key, id: option.value, onClick: () => this.setQuery(dropdownState, option) },
-                  option.key
-                );
-              })
-            )
+            { className: 'dropdown-options' },
+            filter.options.filter(opt => opt.key !== this.state[dropdownState].key).map(option => {
+              return React.createElement(
+                'div',
+                { key: option.key, id: option.value, onMouseDown: () => this.setQuery(dropdownState, option) },
+                option.key
+              );
+            })
           )
         );
       } else {
         extraInfo = React.createElement(
           'div',
           null,
-          filter.input && React.createElement('input', { value: this.state.queries[inputState], onChange: event => this.onChange(event, inputState), type: filter.input.type })
+          filter.input && React.createElement('input', {
+            value: this.state.queries[inputState],
+            onChange: event => this.onChange(event, inputState),
+            onBlur: () => !this.state.queries[inputState] && this.toggleFilter(filter.state),
+            type: filter.input.type,
+            ref: input => this[filter.state] = input
+          })
         );
       }
 
       return React.createElement(
         'div',
-        { key: filter.state, className: 'filter-container' },
+        { tabIndex: 1, key: filter.state, onFocus: () => this.showDropdown(dropdownState), className: 'filter-container', onBlur: () => this.hideDropdown(dropdownState) },
         React.createElement(
           'div',
           { onClick: () => this.toggleFilter(filter.state), className: this.state[filter.state] ? 'filter enabled' : 'filter' },
@@ -21554,14 +21562,25 @@ class Paginator extends React.Component {
       );
     });
 
+    var resultsEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key]);
+
     return React.createElement(
       'header',
       null,
-      filterDom,
       React.createElement(
-        'button',
-        { className: 'search-button', onClick: this.searchRepos },
-        'Search'
+        'p',
+        null,
+        'Search by one or more of these categories'
+      ),
+      React.createElement(
+        'div',
+        { className: 'filters' },
+        filterDom,
+        React.createElement(
+          'button',
+          { disabled: resultsEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
+          'Search'
+        )
       )
     );
   }
@@ -21581,8 +21600,13 @@ const toQueryString = paramsObj => {
   const esc = encodeURIComponent;
   const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key] && key !== 'search');
   if (validQuery.length) {
-    query = validQuery.map(param => `${esc(param)}:${esc(paramsObj[param])}`).join('&');
-    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}&`;
+    query = validQuery.map(param => {
+      if (param !== 'stars') {
+        return `${esc(param)}:${esc(paramsObj[param])}`;
+      }
+      return `${param}:${paramsObj[param]}`;
+    }).join('&');
+    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}+`;
     return `?q=${searchWord}${query}`;
   }
   return query;
