@@ -163,11 +163,28 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.no-results {
+.body {
+  min-height: 300px;
   display: flex;
   justify-content: center;
-  height: 300px;
   align-items: center;
+}
+
+.no-results {
+  display: block;
+  margin: 3px;
+}
+
+.header-message {
+  opacity: 0;
+}
+
+.header-message.show {
+  opacity: 1;
+}
+
+.no-results.mobile {
+  display: none;
 }
 
 .results {
@@ -190,6 +207,7 @@ input[type=number]::-webkit-outer-spin-button {
   border-bottom: 2px solid rgba(0, 0, 0, 0.05);
   font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .results-table tbody tr:nth-of-type(odd) {
@@ -197,9 +215,29 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .results-table td {
-  padding: 12px 50px;
+  padding: 12px 30px;
   border-right: none;
   border-left: none;
+}
+
+.results-table td.sn {
+  padding: 12px 0 12px 30px;
+}
+
+.results-table td.repo-link a {
+  width: 350px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
+}
+
+.results-table td.repo-user a {
+  width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
 }
 
 .paginator {
@@ -219,6 +257,7 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 0;
   cursor: pointer;
   font-size: 13px;
+  outline: none;
 }
 
 .paginator button:disabled {
@@ -263,6 +302,15 @@ input[type=number]::-webkit-outer-spin-button {
   header {
     height: 100vh;
     display: none;
+  }
+
+  .no-results {
+    display: none;
+  }
+
+  .no-results.mobile {
+    display: flex;
+    padding: 30px;
   }
 
   .filters {

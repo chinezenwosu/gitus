@@ -4,6 +4,7 @@ var Paginator = require("./Paginator")
 var Filter = require("./Filter")
 var toQueryString = require("../helpers/string").toQueryString
 var apiUrl = 'https://api.github.com/search/repositories'
+var perPage = 10
 
 class App extends React.Component {
   constructor(props) {
@@ -35,13 +36,14 @@ class App extends React.Component {
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 
     this.setState({ loading: true })
-    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`)
+    fetch(`${apiUrl}${query}&page=${page}&per_page=${perPage}&client_id=${clientId}&client_secret=${clientSecret}`)
       .then(res => res.json())
       .then(repos => {
         if (repos.items) {
           this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' })
-        } else {
-          this.setState({ loading: false, disableNext: true, message: 'There are no more results' })
+        } 
+        if (!repos.items || repos.items.length === 0) {
+          this.setState({ loading: false, disableNext: true, repos: [], message: 'There are no results.' })
         }
       })
   }
@@ -70,12 +72,13 @@ class App extends React.Component {
           <table className='results-table'>
             <thead>
               <tr>
-                <td>Github User</td>
-                <td>Github Repo</td>
-                <td>Number of stars</td>
+                <td className='sn'>S/N</td>
+                <td className='repo-user'>Github User</td>
+                <td className='repo-link'>Github Repo</td>
+                <td>No of stars</td>
               </tr>
             </thead>
-            <ReposData repos={repos} />
+            <ReposData repos={repos} page={page} perPage={perPage} />
           </table>
           <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} />
         </div>
@@ -84,11 +87,14 @@ class App extends React.Component {
 
     return (
       <div>
-        { message && <p>{ message }</p> }
-        <Filter searchRepos={this.searchRepos} disableSearchButton={loading} />
-        { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
-        { repos.length === 0 && loading && <div className='loader' /> }
-        { repos.length > 0 && results }
+        <Filter repoEmpty={repos.length === 0} searchRepos={this.searchRepos} disableSearchButton={loading} />
+        <div className='body'>
+          { message && <p className='no-results'>{ message }</p> }
+          { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
+          { repos.length === 0 && !loading && <div className='no-results mobile'>Please use a desktop browser to view this page.</div> }
+          { repos.length === 0 && loading && <div className='loader' /> }
+          { repos.length > 0 && results }
+        </div>
       </div>
     )
   }

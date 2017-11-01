@@ -100,6 +100,9 @@ class Paginator extends React.Component {
     if (this.state.starsDropdown.value !== '=') {
       queries.stars = `${this.state.starsDropdown.value}${queries.stars}`
     }
+    Object.keys(queries).forEach(key => {
+      queries[key] = this.state[key] ? queries[key] : ''
+    })
     this.props.searchRepos(queries)
   }
 
@@ -163,14 +166,14 @@ class Paginator extends React.Component {
       )
     })
 
-    var resultsEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key])
+    var queriesEmpty = Object.keys(this.state.queries).every(key => !this.state[key] || !this.state.queries[key])
 
     return (
       <header>
-        <p>Search by one or more of these categories</p>
+        <p className={`${this.props.repoEmpty ? 'header-message' : 'show header-message'}`}>Search github repos by one or more of these categories</p>
         <div className='filters'>
           {filterDom}
-          <button disabled={resultsEmpty || this.props.disableSearchButton} className='search-button' onClick={this.searchRepos}>Search</button>
+          <button disabled={queriesEmpty || this.props.disableSearchButton} className='search-button' onClick={this.searchRepos}>Search</button>
         </div>
       </header>
     )

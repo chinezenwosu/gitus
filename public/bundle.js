@@ -21171,6 +21171,7 @@ var Paginator = __webpack_require__(34);
 var Filter = __webpack_require__(35);
 var toQueryString = __webpack_require__(36).toQueryString;
 var apiUrl = 'https://api.github.com/search/repositories';
+var perPage = 10;
 
 class App extends React.Component {
   constructor(props) {
@@ -21202,11 +21203,12 @@ class App extends React.Component {
     var clientSecret = undefined;
 
     this.setState({ loading: true });
-    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
+    fetch(`${apiUrl}${query}&page=${page}&per_page=${perPage}&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
         this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
-      } else {
-        this.setState({ loading: false, disableNext: true, message: 'There are no more results' });
+      }
+      if (!repos.items || repos.items.length === 0) {
+        this.setState({ loading: false, disableNext: true, repos: [], message: 'There are no results.' });
       }
     });
   }
@@ -21244,22 +21246,27 @@ class App extends React.Component {
               null,
               React.createElement(
                 "td",
-                null,
+                { className: "sn" },
+                "S/N"
+              ),
+              React.createElement(
+                "td",
+                { className: "repo-user" },
                 "Github User"
               ),
               React.createElement(
                 "td",
-                null,
+                { className: "repo-link" },
                 "Github Repo"
               ),
               React.createElement(
                 "td",
                 null,
-                "Number of stars"
+                "No of stars"
               )
             )
           ),
-          React.createElement(ReposData, { repos: repos })
+          React.createElement(ReposData, { repos: repos, page: page, perPage: perPage })
         ),
         React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
       );
@@ -21268,19 +21275,28 @@ class App extends React.Component {
     return React.createElement(
       "div",
       null,
-      message && React.createElement(
-        "p",
-        null,
-        message
-      ),
-      React.createElement(Filter, { searchRepos: this.searchRepos, disableSearchButton: loading }),
-      repos.length === 0 && !loading && React.createElement(
+      React.createElement(Filter, { repoEmpty: repos.length === 0, searchRepos: this.searchRepos, disableSearchButton: loading }),
+      React.createElement(
         "div",
-        { className: "no-results" },
-        "Please click on one or more of the search filters above to search for repositories."
-      ),
-      repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
-      repos.length > 0 && results
+        { className: "body" },
+        message && React.createElement(
+          "p",
+          { className: "no-results" },
+          message
+        ),
+        repos.length === 0 && !loading && React.createElement(
+          "div",
+          { className: "no-results" },
+          "Please click on one or more of the search filters above to search for repositories."
+        ),
+        repos.length === 0 && !loading && React.createElement(
+          "div",
+          { className: "no-results mobile" },
+          "Please use a desktop browser to view this page."
+        ),
+        repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
+        repos.length > 0 && results
+      )
     );
   }
 }
@@ -21305,7 +21321,12 @@ class App extends React.Component {
         { key: index },
         React.createElement(
           'td',
-          null,
+          { className: 'sn' },
+          (this.props.page - 1) * this.props.perPage + index + 1
+        ),
+        React.createElement(
+          'td',
+          { className: 'repo-user' },
           React.createElement(
             'a',
             { href: repo.owner.html_url, target: '_blank' },
@@ -21314,7 +21335,7 @@ class App extends React.Component {
         ),
         React.createElement(
           'td',
-          null,
+          { className: 'repo-link' },
           React.createElement(
             'a',
             { href: repo.html_url, target: '_blank' },
@@ -21496,6 +21517,9 @@ class Paginator extends React.Component {
     if (this.state.starsDropdown.value !== '=') {
       queries.stars = `${this.state.starsDropdown.value}${queries.stars}`;
     }
+    Object.keys(queries).forEach(key => {
+      queries[key] = this.state[key] ? queries[key] : '';
+    });
     this.props.searchRepos(queries);
   }
 
@@ -21563,15 +21587,15 @@ class Paginator extends React.Component {
       );
     });
 
-    var resultsEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key]);
+    var queriesEmpty = Object.keys(this.state.queries).every(key => !this.state[key] || !this.state.queries[key]);
 
     return React.createElement(
       'header',
       null,
       React.createElement(
         'p',
-        null,
-        'Search by one or more of these categories'
+        { className: `${this.props.repoEmpty ? 'header-message' : 'show header-message'}` },
+        'Search github repos by one or more of these categories'
       ),
       React.createElement(
         'div',
@@ -21579,7 +21603,7 @@ class Paginator extends React.Component {
         filterDom,
         React.createElement(
           'button',
-          { disabled: resultsEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
+          { disabled: queriesEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
           'Search'
         )
       )
@@ -21600,17 +21624,18 @@ const toQueryString = paramsObj => {
   let searchWord = '';
   const esc = encodeURIComponent;
   const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key] && key !== 'search');
-  if (validQuery.length) {
-    query = validQuery.map(param => {
-      if (param !== 'stars') {
-        return `${esc(param)}:${esc(paramsObj[param])}`;
-      }
-      return `${param}:${paramsObj[param]}`;
-    }).join('&');
-    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}+`;
-    return `?q=${searchWord}${query}`;
+  query = validQuery.map(param => {
+    if (param !== 'stars') {
+      return `${esc(param)}:${esc(paramsObj[param])}`;
+    }
+    return `${param}:${paramsObj[param]}`;
+  }).join('&');
+  if (paramsObj.search && query.length) {
+    searchWord = `${paramsObj.search}+`;
+  } else if (paramsObj.search) {
+    searchWord = `${paramsObj.search}`;
   }
-  return query;
+  return `?q=${searchWord}${query}`;
 };
 /* harmony export (immutable) */ __webpack_exports__["toQueryString"] = toQueryString;
 
