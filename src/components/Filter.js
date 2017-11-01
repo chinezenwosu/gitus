@@ -166,7 +166,7 @@ class Paginator extends React.Component {
       )
     })
 
-    var queriesEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key])
+    var queriesEmpty = Object.keys(this.state.queries).every(key => !this.state[key] || !this.state.queries[key])
 
     return (
       <header>
