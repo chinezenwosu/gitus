@@ -21171,6 +21171,7 @@ var Paginator = __webpack_require__(34);
 var Filter = __webpack_require__(35);
 var toQueryString = __webpack_require__(36).toQueryString;
 var apiUrl = 'https://api.github.com/search/repositories';
+var perPage = 10;
 
 class App extends React.Component {
   constructor(props) {
@@ -21202,7 +21203,7 @@ class App extends React.Component {
     var clientSecret = undefined;
 
     this.setState({ loading: true });
-    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
+    fetch(`${apiUrl}${query}&page=${page}&per_page=${perPage}&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
         this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
       } else {
@@ -21244,22 +21245,27 @@ class App extends React.Component {
               null,
               React.createElement(
                 "td",
-                null,
+                { className: "sn" },
+                "S/N"
+              ),
+              React.createElement(
+                "td",
+                { className: "repo-user" },
                 "Github User"
               ),
               React.createElement(
                 "td",
-                null,
+                { className: "repo-link" },
                 "Github Repo"
               ),
               React.createElement(
                 "td",
                 null,
-                "Number of stars"
+                "No of stars"
               )
             )
           ),
-          React.createElement(ReposData, { repos: repos })
+          React.createElement(ReposData, { repos: repos, page: page, perPage: perPage })
         ),
         React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
       );
@@ -21305,7 +21311,12 @@ class App extends React.Component {
         { key: index },
         React.createElement(
           'td',
-          null,
+          { className: 'sn' },
+          (this.props.page - 1) * this.props.perPage + index + 1
+        ),
+        React.createElement(
+          'td',
+          { className: 'repo-user' },
           React.createElement(
             'a',
             { href: repo.owner.html_url, target: '_blank' },
@@ -21314,7 +21325,7 @@ class App extends React.Component {
         ),
         React.createElement(
           'td',
-          null,
+          { className: 'repo-link' },
           React.createElement(
             'a',
             { href: repo.html_url, target: '_blank' },

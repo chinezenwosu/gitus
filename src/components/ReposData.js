@@ -9,8 +9,9 @@ class App extends React.Component {
     var repoList = repos.map((repo, index) => {
       return (
         <tr key={index}>
-          <td><a href={repo.owner.html_url} target='_blank'>{repo.owner.login}</a></td>
-          <td><a href={repo.html_url} target='_blank'>{repo.html_url}</a></td>
+          <td className='sn'>{((this.props.page - 1) * this.props.perPage) + index + 1}</td>
+          <td className='repo-user'><a href={repo.owner.html_url} target='_blank'>{repo.owner.login}</a></td>
+          <td className='repo-link'><a href={repo.html_url} target='_blank'>{repo.html_url}</a></td>
           <td>{repo.stargazers_count}</td>
         </tr>
       )
