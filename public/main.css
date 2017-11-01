@@ -170,6 +170,14 @@ input[type=number]::-webkit-outer-spin-button {
   align-items: center;
 }
 
+.header-message {
+  opacity: 0;
+}
+
+.header-message.show {
+  opacity: 1;
+}
+
 .no-results.mobile {
   display: none;
 }

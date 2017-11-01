@@ -21279,7 +21279,7 @@ class App extends React.Component {
         null,
         message
       ),
-      React.createElement(Filter, { searchRepos: this.searchRepos, disableSearchButton: loading }),
+      React.createElement(Filter, { repoEmpty: repos.length === 0, searchRepos: this.searchRepos, disableSearchButton: loading }),
       repos.length === 0 && !loading && React.createElement(
         "div",
         { className: "no-results" },
@@ -21579,14 +21579,14 @@ class Paginator extends React.Component {
       );
     });
 
-    var resultsEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key]);
+    var queriesEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key]);
 
     return React.createElement(
       'header',
       null,
       React.createElement(
         'p',
-        null,
+        { className: `${this.props.repoEmpty ? 'header-message' : 'show header-message'}` },
         'Search github repos by one or more of these categories'
       ),
       React.createElement(
@@ -21595,7 +21595,7 @@ class Paginator extends React.Component {
         filterDom,
         React.createElement(
           'button',
-          { disabled: resultsEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
+          { disabled: queriesEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
           'Search'
         )
       )

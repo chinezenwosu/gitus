@@ -87,7 +87,7 @@ class App extends React.Component {
     return (
       <div>
         { message && <p>{ message }</p> }
-        <Filter searchRepos={this.searchRepos} disableSearchButton={loading} />
+        <Filter repoEmpty={repos.length === 0} searchRepos={this.searchRepos} disableSearchButton={loading} />
         { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
         { repos.length === 0 && !loading && <div className='no-results mobile'>Please use a desktop browser to view this page.</div> }
         { repos.length === 0 && loading && <div className='loader' /> }
