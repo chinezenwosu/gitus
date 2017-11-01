@@ -21285,6 +21285,11 @@ class App extends React.Component {
         { className: "no-results" },
         "Please click on one or more of the search filters above to search for repositories."
       ),
+      repos.length === 0 && !loading && React.createElement(
+        "div",
+        { className: "no-results mobile" },
+        "Please use a desktop browser to view this page."
+      ),
       repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
       repos.length > 0 && results
     );
@@ -21582,7 +21587,7 @@ class Paginator extends React.Component {
       React.createElement(
         'p',
         null,
-        'Search by one or more of these categories'
+        'Search github repos by one or more of these categories'
       ),
       React.createElement(
         'div',

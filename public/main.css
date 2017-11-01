@@ -170,6 +170,10 @@ input[type=number]::-webkit-outer-spin-button {
   align-items: center;
 }
 
+.no-results.mobile {
+  display: none;
+}
+
 .results {
   display: flex;
   flex-direction: column;
@@ -285,6 +289,15 @@ input[type=number]::-webkit-outer-spin-button {
   header {
     height: 100vh;
     display: none;
+  }
+
+  .no-results {
+    display: none;
+  }
+
+  .no-results.mobile {
+    display: flex;
+    padding: 30px;
   }
 
   .filters {

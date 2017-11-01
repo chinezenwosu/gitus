@@ -167,7 +167,7 @@ class Paginator extends React.Component {
 
     return (
       <header>
-        <p>Search by one or more of these categories</p>
+        <p>Search github repos by one or more of these categories</p>
         <div className='filters'>
           {filterDom}
           <button disabled={resultsEmpty || this.props.disableSearchButton} className='search-button' onClick={this.searchRepos}>Search</button>
