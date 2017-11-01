@@ -1,6 +1,5 @@
 var path = require('path')
 var webpack = require('webpack')
-require('dotenv').config();
 
 module.exports = {
   entry: path.join(__dirname, 'src/index.js'),

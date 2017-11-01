@@ -80,7 +80,7 @@ class App extends React.Component {
             </thead>
             <ReposData repos={repos} page={page} perPage={perPage} />
           </table>
-          <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} />
+          <Paginator page={page} disableNext={disableNext} setPageQuery={this.setPageQuery} repoIncomplete={repos.length < perPage} />
         </div>
       )
     }
