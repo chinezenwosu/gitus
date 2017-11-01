@@ -21202,7 +21202,6 @@ class App extends React.Component {
     var clientSecret = undefined;
 
     this.setState({ loading: true });
-    console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
         this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
@@ -21217,7 +21216,6 @@ class App extends React.Component {
   }
 
   searchRepos(queries) {
-    console.log('queries', this.state.queries);
     this.setState({ queries }, function () {
       this.fetchRepos(1);
     });
@@ -21459,14 +21457,15 @@ class Paginator extends React.Component {
   }
 
   toggleFilter(state) {
-    this.setState(prevState => {
-      return { [state]: !prevState[state] };
-    }, () => {
-      if (this.state[state]) {
-        this[state].focus();
-        this.showDropdown(`${state}Dropdown`);
-      }
-    });
+    if (this.state[state] !== undefined) {
+      this.setState(prevState => {
+        return { [state]: !prevState[state] };
+      }, () => {
+        if (this.state[state]) {
+          this[state].focus();
+        }
+      });
+    }
   }
 
   showDropdown(state) {
@@ -21487,11 +21486,13 @@ class Paginator extends React.Component {
 
   setQuery(state, value) {
     value.show = this.state[state].show;
-    this.setState({ [state]: value });
+    this.setState({ [state]: value }, () => {
+      this[state.replace('Dropdown', '')].focus();
+    });
   }
 
   searchRepos() {
-    var queries = this.state.queries;
+    var queries = Object.assign({}, this.state.queries);
     if (this.state.starsDropdown.value !== '=') {
       queries.stars = `${this.state.starsDropdown.value}${queries.stars}`;
     }
@@ -21524,13 +21525,13 @@ class Paginator extends React.Component {
             onFocus: () => this.showDropdown(dropdownState),
             ref: input => this[filter.state] = input
           }),
-          this.state[dropdownState].show && React.createElement(
+          React.createElement(
             'div',
             { className: 'dropdown-options' },
             filter.options.filter(opt => opt.key !== this.state[dropdownState].key).map(option => {
               return React.createElement(
                 'div',
-                { key: option.key, id: option.value, onMouseDown: () => this.setQuery(dropdownState, option) },
+                { key: option.key, id: option.value, onClick: () => this.setQuery(dropdownState, option) },
                 option.key
               );
             })
@@ -21552,7 +21553,7 @@ class Paginator extends React.Component {
 
       return React.createElement(
         'div',
-        { tabIndex: 1, key: filter.state, onFocus: () => this.showDropdown(dropdownState), className: 'filter-container', onBlur: () => this.hideDropdown(dropdownState) },
+        { tabIndex: 1, key: filter.state, className: 'filter-container' },
         React.createElement(
           'div',
           { onClick: () => this.toggleFilter(filter.state), className: this.state[filter.state] ? 'filter enabled' : 'filter' },

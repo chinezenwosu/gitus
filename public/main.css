@@ -218,6 +218,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 20px -1px;
   border-radius: 0;
   cursor: pointer;
+  font-size: 13px;
 }
 
 .paginator button:disabled {

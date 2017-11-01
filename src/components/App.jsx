@@ -35,7 +35,6 @@ class App extends React.Component {
     var clientSecret = process.env.GITHUB_CLIENT_SECRET
 
     this.setState({ loading: true })
-    console.log(`${apiUrl}${query}&page=${page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`)
     fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`)
       .then(res => res.json())
       .then(repos => {
@@ -52,7 +51,6 @@ class App extends React.Component {
   }
 
   searchRepos(queries) {
-    console.log('queries', this.state.queries)
     this.setState({ queries }, function() {
       this.fetchRepos(1)
     })

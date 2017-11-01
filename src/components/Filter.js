@@ -61,14 +61,15 @@ class Paginator extends React.Component {
   }
 
   toggleFilter(state) {
-    this.setState(prevState => {
-      return { [state]: !prevState[state] }
-    }, () => {
-      if (this.state[state]) {
-        this[state].focus()
-        this.showDropdown(`${state}Dropdown`)
-      }
-    })
+    if (this.state[state] !== undefined) {
+      this.setState(prevState => {
+        return { [state]: !prevState[state] }
+      }, () => {
+        if (this.state[state]) {
+          this[state].focus()
+        }
+      })
+    }
   }
 
   showDropdown(state) {
@@ -89,11 +90,13 @@ class Paginator extends React.Component {
 
   setQuery(state, value) {
     value.show = this.state[state].show
-    this.setState({ [state]: value })
+    this.setState({ [state]: value }, () => {
+      this[state.replace('Dropdown', '')].focus()
+    })
   }
 
   searchRepos() {
-    var queries = this.state.queries
+    var queries = Object.assign({}, this.state.queries)
     if (this.state.starsDropdown.value !== '=') {
       queries.stars = `${this.state.starsDropdown.value}${queries.stars}`
     }
@@ -124,16 +127,13 @@ class Paginator extends React.Component {
                 ref={(input) => this[filter.state] = input}
               />
             }
-            {
-              this.state[dropdownState].show &&
-              <div className='dropdown-options'>
-                {
-                  filter.options.filter(opt => opt.key !== this.state[dropdownState].key).map(option => {
-                    return <div key={option.key} id={option.value} onMouseDown={() => this.setQuery(dropdownState, option)}>{option.key}</div>
-                  })
-                }
-              </div>
-            }
+            <div className='dropdown-options'>
+              {
+                filter.options.filter(opt => opt.key !== this.state[dropdownState].key).map(option => {
+                  return <div key={option.key} id={option.value} onClick={() => this.setQuery(dropdownState, option)}>{option.key}</div>
+                })
+              }
+            </div>
           </div>
         )
       } else {
@@ -154,7 +154,7 @@ class Paginator extends React.Component {
       }
 
       return (
-        <div tabIndex={1} key={filter.state} onFocus={() => this.showDropdown(dropdownState)} className='filter-container' onBlur={() => this.hideDropdown(dropdownState)}>
+        <div tabIndex={1} key={filter.state} className='filter-container'>
           <div onClick={() => this.toggleFilter(filter.state)} className={this.state[filter.state] ? 'filter enabled' : 'filter'}>
             {filter.text}
           </div>
