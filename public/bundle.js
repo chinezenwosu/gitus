@@ -21268,7 +21268,7 @@ class App extends React.Component {
           ),
           React.createElement(ReposData, { repos: repos, page: page, perPage: perPage })
         ),
-        React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
+        React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery, repoIncomplete: repos.length < perPage })
       );
     }
 
@@ -21410,7 +21410,7 @@ class Paginator extends React.Component {
         ),
         React.createElement(
           'button',
-          { className: 'next', onClick: () => this.goToPage(1), disabled: this.props.disableNext },
+          { className: 'next', onClick: () => this.goToPage(1), disabled: this.props.disableNext || this.props.repoIncomplete },
           'Next'
         )
       )

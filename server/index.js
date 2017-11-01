@@ -2,6 +2,7 @@ var express = require('express')
 var path = require('path')
 var app = express()
 var port = 8080
+require('dotenv').config();
 
 app.use(express.static(path.join(__dirname, '../public')))
 

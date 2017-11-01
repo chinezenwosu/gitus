@@ -24,7 +24,7 @@ class Paginator extends React.Component {
         <div className='page'>Page {this.props.page}</div>
         <div>
           <button className='previous' onClick={() => this.goToPage(-1)} disabled={this.props.page < 2}>Previous</button>
-          <button className='next' onClick={() => this.goToPage(1)} disabled={this.props.disableNext}>Next</button>
+          <button className='next' onClick={() => this.goToPage(1)} disabled={this.props.disableNext || this.props.repoIncomplete}>Next</button>
         </div>
       </div>
     )
