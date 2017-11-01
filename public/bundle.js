@@ -300,6 +300,21 @@ module.exports = emptyFunction;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(16);
+} else {
+  module.exports = __webpack_require__(17);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -353,21 +368,6 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 module.exports = invariant;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(16);
-} else {
-  module.exports = __webpack_require__(17);
-}
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -575,7 +575,7 @@ module.exports = warning;
 
 
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(2);
+  var invariant = __webpack_require__(3);
   var warning = __webpack_require__(6);
   var ReactPropTypesSecret = __webpack_require__(8);
   var loggedTypeFailures = {};
@@ -956,7 +956,7 @@ module.exports = getActiveElement;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 var ReactDom = __webpack_require__(18);
 var App = __webpack_require__(32);
 
@@ -976,7 +976,7 @@ ReactDom.render(React.createElement(App, null), document.getElementById('app'));
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(4),p=__webpack_require__(5);__webpack_require__(2);var r=__webpack_require__(1);
+var f=__webpack_require__(4),p=__webpack_require__(5);__webpack_require__(3);var r=__webpack_require__(1);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -1016,7 +1016,7 @@ if (process.env.NODE_ENV !== "production") {
 var objectAssign$1 = __webpack_require__(4);
 var require$$0 = __webpack_require__(6);
 var emptyObject = __webpack_require__(5);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var emptyFunction = __webpack_require__(1);
 var checkPropTypes = __webpack_require__(7);
 
@@ -2759,7 +2759,7 @@ if (process.env.NODE_ENV === 'production') {
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(3);__webpack_require__(2);var l=__webpack_require__(9),n=__webpack_require__(4),ba=__webpack_require__(10),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(11),fa=__webpack_require__(12),ha=__webpack_require__(13),ia=__webpack_require__(14);
+var aa=__webpack_require__(2);__webpack_require__(3);var l=__webpack_require__(9),n=__webpack_require__(4),ba=__webpack_require__(10),ca=__webpack_require__(1),da=__webpack_require__(5),ea=__webpack_require__(11),fa=__webpack_require__(12),ha=__webpack_require__(13),ia=__webpack_require__(14);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -3084,8 +3084,8 @@ if (process.env.NODE_ENV !== "production") {
 
 'use strict';
 
-var react = __webpack_require__(3);
-var invariant = __webpack_require__(2);
+var react = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var ExecutionEnvironment = __webpack_require__(9);
 var _assign = __webpack_require__(4);
 var EventListener = __webpack_require__(10);
@@ -20561,7 +20561,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 var emptyFunction = __webpack_require__(1);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var warning = __webpack_require__(6);
 var assign = __webpack_require__(4);
 
@@ -21111,7 +21111,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 var emptyFunction = __webpack_require__(1);
-var invariant = __webpack_require__(2);
+var invariant = __webpack_require__(3);
 var ReactPropTypesSecret = __webpack_require__(8);
 
 module.exports = function() {
@@ -21165,10 +21165,11 @@ module.exports = function() {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 var ReposData = __webpack_require__(33);
 var Paginator = __webpack_require__(34);
-var toQueryString = __webpack_require__(35).toQueryString;
+var Filter = __webpack_require__(35);
+var toQueryString = __webpack_require__(36).toQueryString;
 var apiUrl = 'https://api.github.com/search/repositories';
 
 class App extends React.Component {
@@ -21177,75 +21178,109 @@ class App extends React.Component {
 
     this.state = {
       queries: {
-        stars: '<10',
-        topic: 'ruby',
-        fork: true
+        search: '',
+        stars: '',
+        topic: '',
+        language: ''
       },
       page: 1,
       per_page: 10,
-      repos: []
+      repos: [],
+      message: '',
+      disableNext: false,
+      loading: false
     };
 
     this.setPageQuery = this.setPageQuery.bind(this);
     this.fetchRepos = this.fetchRepos.bind(this);
+    this.searchRepos = this.searchRepos.bind(this);
   }
 
-  componentWillMount() {
-    this.fetchRepos();
-  }
-
-  fetchRepos() {
+  fetchRepos(page) {
     var query = toQueryString(this.state.queries);
-    var clientId = "8276ce473b0a8be6e7b2";
-    var clientSecret = "f69ee6fa66eaa5bf61703d38e0443e86a00eaf3d";
+    var clientId = undefined;
+    var clientSecret = undefined;
 
-    console.log(`${apiUrl}${query}&page=${this.state.page}&per_page=3&client_id=${clientId}&client_secret=${clientSecret}`);
-    fetch(`${apiUrl}${query}&page=${this.state.page}&per_page=3`).then(res => res.json()).then(repos => {
-      console.log(repos);this.setState({ repos: repos.items });
+    this.setState({ loading: true });
+    fetch(`${apiUrl}${query}&page=${page}&per_page=10&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
+      if (repos.items) {
+        this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
+      } else {
+        this.setState({ loading: false, disableNext: true, message: 'There are no more results' });
+      }
     });
   }
 
   setPageQuery(page) {
-    this.setState({ page }, () => {
-      this.fetchRepos();
+    this.fetchRepos(page);
+  }
+
+  searchRepos(queries) {
+    this.setState({ queries }, function () {
+      this.fetchRepos(1);
     });
   }
 
   render() {
-    var repos = this.state.repos;
+    var repos = this.state.repos || [];
+    var message = this.state.message;
+    var page = this.state.page;
+    var loading = this.state.loading;
+    var disableNext = this.state.disableNext;
+
+    var results = React.createElement("div", { className: "loader" });
+    if (!loading) {
+      results = React.createElement(
+        "div",
+        { className: "results" },
+        React.createElement(
+          "table",
+          { className: "results-table" },
+          React.createElement(
+            "thead",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              React.createElement(
+                "td",
+                null,
+                "Github User"
+              ),
+              React.createElement(
+                "td",
+                null,
+                "Github Repo"
+              ),
+              React.createElement(
+                "td",
+                null,
+                "Number of stars"
+              )
+            )
+          ),
+          React.createElement(ReposData, { repos: repos })
+        ),
+        React.createElement(Paginator, { page: page, disableNext: disableNext, setPageQuery: this.setPageQuery })
+      );
+    }
 
     return React.createElement(
       "div",
       null,
-      React.createElement(
-        "table",
+      message && React.createElement(
+        "p",
         null,
-        React.createElement(
-          "thead",
-          null,
-          React.createElement(
-            "tr",
-            null,
-            React.createElement(
-              "td",
-              null,
-              "Github User"
-            ),
-            React.createElement(
-              "td",
-              null,
-              "Github Repo"
-            ),
-            React.createElement(
-              "td",
-              null,
-              "Number of stars"
-            )
-          )
-        ),
-        React.createElement(ReposData, { repos: repos })
+        message
       ),
-      React.createElement(Paginator, { page: this.state.page, setPageQuery: this.setPageQuery })
+      React.createElement(Filter, { searchRepos: this.searchRepos, disableSearchButton: loading }),
+      repos.length === 0 && !loading && React.createElement(
+        "div",
+        { className: "no-results" },
+        "Please click on one or more of the search filters above to search for repositories."
+      ),
+      repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
+      repos.length > 0 && results
     );
   }
 }
@@ -21256,7 +21291,7 @@ module.exports = App;
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 
 class App extends React.Component {
   constructor(props) {
@@ -21266,24 +21301,28 @@ class App extends React.Component {
   getReposBody(repos) {
     var repoList = repos.map((repo, index) => {
       return React.createElement(
-        "tr",
+        'tr',
         { key: index },
         React.createElement(
-          "td",
-          null,
-          repo.owner.login
-        ),
-        React.createElement(
-          "td",
+          'td',
           null,
           React.createElement(
-            "a",
-            { href: repo.html_url, target: "_blank" },
+            'a',
+            { href: repo.owner.html_url, target: '_blank' },
+            repo.owner.login
+          )
+        ),
+        React.createElement(
+          'td',
+          null,
+          React.createElement(
+            'a',
+            { href: repo.html_url, target: '_blank' },
             repo.html_url
           )
         ),
         React.createElement(
-          "td",
+          'td',
           null,
           repo.stargazers_count
         )
@@ -21297,7 +21336,7 @@ class App extends React.Component {
     var repos = this.props.repos;
 
     return React.createElement(
-      "tbody",
+      'tbody',
       null,
       this.getReposBody(repos)
     );
@@ -21310,7 +21349,7 @@ module.exports = App;
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var React = __webpack_require__(3);
+var React = __webpack_require__(2);
 
 class Paginator extends React.Component {
   constructor(props) {
@@ -21332,42 +21371,26 @@ class Paginator extends React.Component {
     var repos = this.state.repos;
 
     return React.createElement(
-      "div",
-      null,
+      'div',
+      { className: 'paginator' },
       React.createElement(
-        "table",
+        'div',
+        { className: 'page' },
+        'Page ',
+        this.props.page
+      ),
+      React.createElement(
+        'div',
         null,
         React.createElement(
-          "thead",
-          null,
-          React.createElement(
-            "tr",
-            null,
-            React.createElement(
-              "td",
-              null,
-              "Page ",
-              this.props.page
-            ),
-            React.createElement(
-              "td",
-              { onClick: () => this.goToPage(-1) },
-              React.createElement(
-                "button",
-                { disabled: this.props.page < 2 },
-                "Previous"
-              )
-            ),
-            React.createElement(
-              "td",
-              { onClick: () => this.goToPage(1) },
-              React.createElement(
-                "button",
-                null,
-                "Next"
-              )
-            )
-          )
+          'button',
+          { className: 'previous', onClick: () => this.goToPage(-1), disabled: this.props.page < 2 },
+          'Previous'
+        ),
+        React.createElement(
+          'button',
+          { className: 'next', onClick: () => this.goToPage(1), disabled: this.props.disableNext },
+          'Next'
         )
       )
     );
@@ -21378,17 +21401,214 @@ module.exports = Paginator;
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var React = __webpack_require__(2);
+
+class Paginator extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      search: false,
+      language: false,
+      stars: false,
+      topic: false,
+      starsDropdown: {
+        show: false,
+        key: 'Equal to',
+        value: '='
+      },
+      queries: {
+        search: '',
+        stars: '',
+        topic: '',
+        language: ''
+      },
+      starsInput: ''
+    };
+
+    this.getFilters = this.getFilters.bind(this);
+    this.setQuery = this.setQuery.bind(this);
+    this.showDropdown = this.showDropdown.bind(this);
+    this.hideDropdown = this.hideDropdown.bind(this);
+    this.searchRepos = this.searchRepos.bind(this);
+  }
+
+  getFilters() {
+    return [{ text: 'Search word', state: 'search', input: { type: 'text' } }, { text: 'Language', state: 'language', input: { type: 'text' } }, { text: 'Topic', state: 'topic', input: { type: 'text' } }, {
+      text: 'No. of Stars',
+      state: 'stars',
+      dropdown: true,
+      options: [{
+        key: 'Equal to',
+        value: '='
+      }, {
+        key: 'Less than',
+        value: '<'
+      }, {
+        key: 'Greater than',
+        value: '>'
+      }],
+      input: {
+        type: 'number'
+      }
+    }];
+  }
+
+  toggleFilter(state) {
+    if (this.state[state] !== undefined) {
+      this.setState(prevState => {
+        return { [state]: !prevState[state] };
+      }, () => {
+        if (this.state[state]) {
+          this[state].focus();
+        }
+      });
+    }
+  }
+
+  showDropdown(state) {
+    if (this.state[state] && !this.state[state].show) {
+      this.setState(prevState => {
+        return { [state]: Object.assign(prevState[state], { show: true }) };
+      });
+    }
+  }
+
+  hideDropdown(state) {
+    if (this.state[state] && this.state[state].show) {
+      this.setState(prevState => {
+        return { [state]: Object.assign(prevState[state], { show: false }) };
+      });
+    }
+  }
+
+  setQuery(state, value) {
+    value.show = this.state[state].show;
+    this.setState({ [state]: value }, () => {
+      this[state.replace('Dropdown', '')].focus();
+    });
+  }
+
+  searchRepos() {
+    var queries = Object.assign({}, this.state.queries);
+    if (this.state.starsDropdown.value !== '=') {
+      queries.stars = `${this.state.starsDropdown.value}${queries.stars}`;
+    }
+    this.props.searchRepos(queries);
+  }
+
+  onChange(event, inputState) {
+    this.setState({ queries: Object.assign(this.state.queries, { [inputState]: event.target.value }) });
+  }
+
+  render() {
+    var filterDom = this.getFilters().map(filter => {
+      var extraInfo;
+      var dropdownState = `${filter.state}Dropdown`;
+      var inputState = `${filter.state}`;
+
+      if (filter.dropdown) {
+        extraInfo = React.createElement(
+          'div',
+          { className: 'dropdown' },
+          React.createElement(
+            'span',
+            null,
+            this.state[dropdownState].key
+          ),
+          filter.input && React.createElement('input', {
+            value: this.state.queries[inputState],
+            onChange: event => this.onChange(event, inputState),
+            type: filter.input.type,
+            onFocus: () => this.showDropdown(dropdownState),
+            ref: input => this[filter.state] = input
+          }),
+          React.createElement(
+            'div',
+            { className: 'dropdown-options' },
+            filter.options.filter(opt => opt.key !== this.state[dropdownState].key).map(option => {
+              return React.createElement(
+                'div',
+                { key: option.key, id: option.value, onClick: () => this.setQuery(dropdownState, option) },
+                option.key
+              );
+            })
+          )
+        );
+      } else {
+        extraInfo = React.createElement(
+          'div',
+          null,
+          filter.input && React.createElement('input', {
+            value: this.state.queries[inputState],
+            onChange: event => this.onChange(event, inputState),
+            onBlur: () => !this.state.queries[inputState] && this.toggleFilter(filter.state),
+            type: filter.input.type,
+            ref: input => this[filter.state] = input
+          })
+        );
+      }
+
+      return React.createElement(
+        'div',
+        { tabIndex: 1, key: filter.state, className: 'filter-container' },
+        React.createElement(
+          'div',
+          { onClick: () => this.toggleFilter(filter.state), className: this.state[filter.state] ? 'filter enabled' : 'filter' },
+          filter.text
+        ),
+        this.state[filter.state] && extraInfo
+      );
+    });
+
+    var resultsEmpty = Object.keys(this.state.queries).every(key => !this.state.queries[key]);
+
+    return React.createElement(
+      'header',
+      null,
+      React.createElement(
+        'p',
+        null,
+        'Search by one or more of these categories'
+      ),
+      React.createElement(
+        'div',
+        { className: 'filters' },
+        filterDom,
+        React.createElement(
+          'button',
+          { disabled: resultsEmpty || this.props.disableSearchButton, className: 'search-button', onClick: this.searchRepos },
+          'Search'
+        )
+      )
+    );
+  }
+}
+
+module.exports = Paginator;
+
+/***/ }),
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const toQueryString = paramsObj => {
   let query = '';
+  let searchWord = '';
   const esc = encodeURIComponent;
-  const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key]);
+  const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key] && key !== 'search');
   if (validQuery.length) {
-    query = validQuery.map(param => `${esc(param)}:${esc(paramsObj[param])}`).join('&');
-    return `?q=${query}`;
+    query = validQuery.map(param => {
+      if (param !== 'stars') {
+        return `${esc(param)}:${esc(paramsObj[param])}`;
+      }
+      return `${param}:${paramsObj[param]}`;
+    }).join('&');
+    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}+`;
+    return `?q=${searchWord}${query}`;
   }
   return query;
 };
