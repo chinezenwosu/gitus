@@ -100,6 +100,9 @@ class Paginator extends React.Component {
     if (this.state.starsDropdown.value !== '=') {
       queries.stars = `${this.state.starsDropdown.value}${queries.stars}`
     }
+    Object.keys(queries).forEach(key => {
+      queries[key] = this.state[key] ? queries[key] : ''
+    })
     this.props.searchRepos(queries)
   }
 
