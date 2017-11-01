@@ -163,11 +163,16 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.no-results {
+.body {
+  min-height: 300px;
   display: flex;
   justify-content: center;
-  height: 300px;
   align-items: center;
+}
+
+.no-results {
+  display: block;
+  margin: 3px;
 }
 
 .header-message {

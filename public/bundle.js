@@ -21206,8 +21206,9 @@ class App extends React.Component {
     fetch(`${apiUrl}${query}&page=${page}&per_page=${perPage}&client_id=${clientId}&client_secret=${clientSecret}`).then(res => res.json()).then(repos => {
       if (repos.items) {
         this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' });
-      } else {
-        this.setState({ loading: false, disableNext: true, message: 'There are no more results' });
+      }
+      if (!repos.items || repos.items.length === 0) {
+        this.setState({ loading: false, disableNext: true, repos: [], message: 'There are no results.' });
       }
     });
   }
@@ -21274,24 +21275,28 @@ class App extends React.Component {
     return React.createElement(
       "div",
       null,
-      message && React.createElement(
-        "p",
-        null,
-        message
-      ),
       React.createElement(Filter, { repoEmpty: repos.length === 0, searchRepos: this.searchRepos, disableSearchButton: loading }),
-      repos.length === 0 && !loading && React.createElement(
+      React.createElement(
         "div",
-        { className: "no-results" },
-        "Please click on one or more of the search filters above to search for repositories."
-      ),
-      repos.length === 0 && !loading && React.createElement(
-        "div",
-        { className: "no-results mobile" },
-        "Please use a desktop browser to view this page."
-      ),
-      repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
-      repos.length > 0 && results
+        { className: "body" },
+        message && React.createElement(
+          "p",
+          { className: "no-results" },
+          message
+        ),
+        repos.length === 0 && !loading && React.createElement(
+          "div",
+          { className: "no-results" },
+          "Please click on one or more of the search filters above to search for repositories."
+        ),
+        repos.length === 0 && !loading && React.createElement(
+          "div",
+          { className: "no-results mobile" },
+          "Please use a desktop browser to view this page."
+        ),
+        repos.length === 0 && loading && React.createElement("div", { className: "loader" }),
+        repos.length > 0 && results
+      )
     );
   }
 }
@@ -21616,17 +21621,18 @@ const toQueryString = paramsObj => {
   let searchWord = '';
   const esc = encodeURIComponent;
   const validQuery = Object.keys(paramsObj).filter(key => paramsObj[key] && key !== 'search');
-  if (validQuery.length) {
-    query = validQuery.map(param => {
-      if (param !== 'stars') {
-        return `${esc(param)}:${esc(paramsObj[param])}`;
-      }
-      return `${param}:${paramsObj[param]}`;
-    }).join('&');
-    if (paramsObj.search && query.length) searchWord = `${paramsObj.search}+`;
-    return `?q=${searchWord}${query}`;
+  query = validQuery.map(param => {
+    if (param !== 'stars') {
+      return `${esc(param)}:${esc(paramsObj[param])}`;
+    }
+    return `${param}:${paramsObj[param]}`;
+  }).join('&');
+  if (paramsObj.search && query.length) {
+    searchWord = `${paramsObj.search}+`;
+  } else if (paramsObj.search) {
+    searchWord = `${paramsObj.search}`;
   }
-  return query;
+  return `?q=${searchWord}${query}`;
 };
 /* harmony export (immutable) */ __webpack_exports__["toQueryString"] = toQueryString;
 

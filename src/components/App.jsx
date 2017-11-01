@@ -41,8 +41,9 @@ class App extends React.Component {
       .then(repos => {
         if (repos.items) {
           this.setState({ loading: false, disableNext: false, page, repos: repos.items, message: '' })
-        } else {
-          this.setState({ loading: false, disableNext: true, message: 'There are no more results' })
+        } 
+        if (!repos.items || repos.items.length === 0) {
+          this.setState({ loading: false, disableNext: true, repos: [], message: 'There are no results.' })
         }
       })
   }
@@ -86,12 +87,14 @@ class App extends React.Component {
 
     return (
       <div>
-        { message && <p>{ message }</p> }
         <Filter repoEmpty={repos.length === 0} searchRepos={this.searchRepos} disableSearchButton={loading} />
-        { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
-        { repos.length === 0 && !loading && <div className='no-results mobile'>Please use a desktop browser to view this page.</div> }
-        { repos.length === 0 && loading && <div className='loader' /> }
-        { repos.length > 0 && results }
+        <div className='body'>
+          { message && <p className='no-results'>{ message }</p> }
+          { repos.length === 0 && !loading && <div className='no-results'>Please click on one or more of the search filters above to search for repositories.</div> }
+          { repos.length === 0 && !loading && <div className='no-results mobile'>Please use a desktop browser to view this page.</div> }
+          { repos.length === 0 && loading && <div className='loader' /> }
+          { repos.length > 0 && results }
+        </div>
       </div>
     )
   }
